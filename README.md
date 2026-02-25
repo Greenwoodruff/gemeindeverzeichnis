@@ -26,9 +26,19 @@ Die `./convert.rb` wandelt die heruntergeladenen Suchergebnisse ins [YAML](http:
 Die `./update.sh` führt den Download und die Umwandlung durch, commitet die Änderungen und pusht diese.
 
 Die `./csv.rb` gibt die YAML-Dateien im CSV-Format auf der Standardausgabe aus.
+Der Header wird dabei nur einmal geschrieben.
+
+Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird zusätzlich die Spalte `Entfernung zu Neckarwestheim (km)` berechnet.
+Die Berechnung nutzt Luftlinie (Haversine) auf Basis von OpenStreetMap/Nominatim-Geokodierung und speichert Ergebnisse in `geocode_cache.yml`.
+
+Beispiele:
+
+```
+ruby csv.rb > gemeindeverzeichnis.csv
+DISTANCE_FROM_NECKARWESTHEIM=1 ruby csv.rb > gemeindeverzeichnis_mit_entfernung.csv
+```
 
 
 Lizenz
 ------
 [WTFPL](http://sam.zoy.org/wtfpl/)
-
