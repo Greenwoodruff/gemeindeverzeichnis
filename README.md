@@ -27,6 +27,10 @@ Die `./update.sh` führt den Download und die Umwandlung durch, commitet die Än
 
 Die `./csv.rb` gibt die YAML-Dateien im CSV-Format auf der Standardausgabe aus.
 Der Header wird dabei nur einmal geschrieben.
+Die Spalte `Entfernung zu Neckarwestheim (km)` ist immer enthalten.
+
+Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird die Spalte `Entfernung zu Neckarwestheim (km)` befüllt.
+Ohne diese Variable bleibt die Spalte leer.
 
 Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird zusätzlich die Spalte `Entfernung zu Neckarwestheim (km)` berechnet.
 Die Berechnung nutzt Luftlinie (Haversine) auf Basis von OpenStreetMap/Nominatim-Geokodierung und speichert Ergebnisse in `geocode_cache.yml`.
@@ -37,6 +41,32 @@ Beispiele:
 ruby csv.rb > gemeindeverzeichnis.csv
 DISTANCE_FROM_NECKARWESTHEIM=1 ruby csv.rb > gemeindeverzeichnis_mit_entfernung.csv
 ```
+
+
+Spezial-Export für Rentalize
+----------------------------
+
+Für eine Liste aller Orte mit mehr als 50.000 Einwohnern im gewünschten Format (`projekt`, `ort`, `plz`, `bundesland`, `region`, `lat`, `lng`) gibt es `./rentalize_export.rb`:
+
+```
+ruby rentalize_export.rb > rentalize_orte.tsv
+```
+
+Hinweise:
+- Ausgabe ist Tab-separiert (`.tsv`) und enthält den Header `projekt	ort	plz	bundesland	region	lat	lng`.
+- Standardmäßig werden `lat`/`lng` nicht befüllt (leer).
+- Mit `GEOCODE=1` werden `lat`/`lng` per Nominatim-Geokodierung berechnet und in `geocode_cache.yml` zwischengespeichert:
+
+```
+GEOCODE=1 ruby rentalize_export.rb > rentalize_orte.tsv
+```
+
+Optional kann die Einwohnergrenze angepasst werden:
+
+```
+MIN_POPULATION=100000 ruby rentalize_export.rb > rentalize_orte_100k.tsv
+```
+
 
 
 Lizenz

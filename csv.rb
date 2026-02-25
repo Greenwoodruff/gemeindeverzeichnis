@@ -87,12 +87,13 @@ CSV.open('/dev/stdout', "wb", :col_sep => ';') do |csv|
 
     unless header_written
       headers = yaml.keys.dup
-      headers << 'Entfernung zu Neckarwestheim (km)' if with_distance
+      headers << 'Entfernung zu Neckarwestheim (km)'
       csv << headers
       header_written = true
     end
 
     values = yaml.values.dup
+    values << (with_distance ? distance_to_neckarwestheim(yaml) : nil)
     values << distance_to_neckarwestheim(yaml) if with_distance
     csv << values
     rows_written += 1
