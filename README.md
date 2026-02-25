@@ -31,6 +31,8 @@ Die Spalte `Entfernung zu Neckarwestheim (km)` ist immer enthalten.
 
 Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird die Spalte `Entfernung zu Neckarwestheim (km)` befüllt.
 Ohne diese Variable bleibt die Spalte leer.
+
+Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird zusätzlich die Spalte `Entfernung zu Neckarwestheim (km)` berechnet.
 Die Berechnung nutzt Luftlinie (Haversine) auf Basis von OpenStreetMap/Nominatim-Geokodierung und speichert Ergebnisse in `geocode_cache.yml`.
 
 Beispiele:
