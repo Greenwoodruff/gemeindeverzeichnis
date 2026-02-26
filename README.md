@@ -26,9 +26,108 @@ Die `./convert.rb` wandelt die heruntergeladenen Suchergebnisse ins [YAML](http:
 Die `./update.sh` führt den Download und die Umwandlung durch, commitet die Änderungen und pusht diese.
 
 Die `./csv.rb` gibt die YAML-Dateien im CSV-Format auf der Standardausgabe aus.
+Der Header wird dabei nur einmal geschrieben.
+Die Spalte `Entfernung zu Neckarwestheim (km)` ist immer enthalten.
+
+Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird die Spalte `Entfernung zu Neckarwestheim (km)` befüllt.
+Ohne diese Variable bleibt die Spalte leer.
+Die Berechnung nutzt Luftlinie (Haversine) auf Basis von OpenStreetMap/Nominatim-Geokodierung und speichert Ergebnisse in `geocode_cache.yml`.
+
+Codespaces: Befehle 1:1
+-----------------------
+
+Im GitHub Codespace im Terminal diese Befehle direkt ausführen:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+```
+
+1) Nur Download der Rohdaten:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+./download.sh
+```
+
+2) HTML in YAML umwandeln:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+./convert.rb
+```
+
+3) Komplettes Update (pull + download + convert + commit + push):
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+./update.sh
+```
+
+4) Standard-CSV erzeugen:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+ruby csv.rb > gemeindeverzeichnis.csv
+```
+
+5) CSV mit Distanzspalte befüllen:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+DISTANCE_FROM_NECKARWESTHEIM=1 ruby csv.rb > gemeindeverzeichnis_mit_entfernung.csv
+```
+
+6) Nur Test mit begrenzten Zeilen:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+LIMIT_ROWS=10 ruby csv.rb
+```
+
+Spezial-Export für Rentalize
+----------------------------
+
+Für eine Liste aller Orte mit mehr als 50.000 Einwohnern im gewünschten Format (`projekt`, `ort`, `plz`, `bundesland`, `region`, `lat`, `lng`) gibt es `./rentalize_export.rb`.
+
+Warum vorher `*.tsv` und nicht `*.csv`?
+- Bisher war der Export tab-separiert (TSV), deshalb die Endung `.tsv`.
+- Für Excel ist jetzt standardmäßig CSV mit Semikolon und UTF-8-BOM aktiv.
+
+Standard (Excel-freundlich, CSV mit `;` + UTF-8-BOM):
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+ruby rentalize_export.rb > rentalize_orte.csv
+```
+
+Mit Koordinatenberechnung:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+GEOCODE=1 ruby rentalize_export.rb > rentalize_orte.csv
+```
+
+Optional wieder als TSV:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+OUTPUT_FORMAT=tsv ruby rentalize_export.rb > rentalize_orte.tsv
+```
+
+Optional kann die Einwohnergrenze angepasst werden:
+
+```bash
+cd /workspaces/gemeindeverzeichnis
+MIN_POPULATION=100000 ruby rentalize_export.rb > rentalize_orte_100k.csv
+```
+
+Excel & Umlaute
+---------------
+
+- `csv.rb` und `rentalize_export.rb` schreiben jetzt standardmäßig UTF-8 mit BOM für bessere direkte Öffnung in Excel.
+- Das CSV-Trennzeichen ist `;`, was für deutsche Excel-Installationen typischerweise direkt korrekt erkannt wird.
 
 
 Lizenz
 ------
 [WTFPL](http://sam.zoy.org/wtfpl/)
-
