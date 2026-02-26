@@ -99,6 +99,7 @@ begin
 
     values = yaml.values.dup
     values << (with_distance ? distance_to_neckarwestheim(yaml) : nil)
+    values << distance_to_neckarwestheim(yaml) if with_distance
     csv << values
     rows_written += 1
     break if limit_rows && rows_written >= limit_rows

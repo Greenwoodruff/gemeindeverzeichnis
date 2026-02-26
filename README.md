@@ -84,6 +84,17 @@ cd /workspaces/gemeindeverzeichnis
 LIMIT_ROWS=10 ruby csv.rb
 ```
 
+Mit `DISTANCE_FROM_NECKARWESTHEIM=1` wird zusätzlich die Spalte `Entfernung zu Neckarwestheim (km)` berechnet.
+Die Berechnung nutzt Luftlinie (Haversine) auf Basis von OpenStreetMap/Nominatim-Geokodierung und speichert Ergebnisse in `geocode_cache.yml`.
+
+Beispiele:
+
+```
+ruby csv.rb > gemeindeverzeichnis.csv
+DISTANCE_FROM_NECKARWESTHEIM=1 ruby csv.rb > gemeindeverzeichnis_mit_entfernung.csv
+```
+
+
 Spezial-Export für Rentalize
 ----------------------------
 
@@ -112,6 +123,19 @@ Optional wieder als TSV:
 ```bash
 cd /workspaces/gemeindeverzeichnis
 OUTPUT_FORMAT=tsv ruby rentalize_export.rb > rentalize_orte.tsv
+Für eine Liste aller Orte mit mehr als 50.000 Einwohnern im gewünschten Format (`projekt`, `ort`, `plz`, `bundesland`, `region`, `lat`, `lng`) gibt es `./rentalize_export.rb`:
+
+```
+ruby rentalize_export.rb > rentalize_orte.tsv
+```
+
+Hinweise:
+- Ausgabe ist Tab-separiert (`.tsv`) und enthält den Header `projekt	ort	plz	bundesland	region	lat	lng`.
+- Standardmäßig werden `lat`/`lng` nicht befüllt (leer).
+- Mit `GEOCODE=1` werden `lat`/`lng` per Nominatim-Geokodierung berechnet und in `geocode_cache.yml` zwischengespeichert:
+
+```
+GEOCODE=1 ruby rentalize_export.rb > rentalize_orte.tsv
 ```
 
 Optional kann die Einwohnergrenze angepasst werden:
@@ -126,6 +150,10 @@ Excel & Umlaute
 
 - `csv.rb` und `rentalize_export.rb` schreiben jetzt standardmäßig UTF-8 mit BOM für bessere direkte Öffnung in Excel.
 - Das CSV-Trennzeichen ist `;`, was für deutsche Excel-Installationen typischerweise direkt korrekt erkannt wird.
+```
+MIN_POPULATION=100000 ruby rentalize_export.rb > rentalize_orte_100k.tsv
+```
+
 
 
 Lizenz

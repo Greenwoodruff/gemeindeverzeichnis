@@ -98,5 +98,9 @@ csv = CSV.new($stdout, col_sep: col_sep)
   csv << %w[projekt ort plz bundesland region lat lng]
 rows.each { |row| csv << row }
 csv.close
+CSV.open('/dev/stdout', 'wb', col_sep: "\t") do |csv|
+  csv << %w[projekt ort plz bundesland region lat lng]
+  rows.each { |row| csv << row }
+end
 
 save_geocode_cache if GEOCODE_ENABLED
