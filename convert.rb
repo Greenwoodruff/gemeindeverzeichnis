@@ -3,10 +3,11 @@
 
 require 'nokogiri'
 require 'yaml'
+require 'fileutils'
 
 # Daten-Verzeichnis anlegen und leeren
-`mkdir data`
-`rm data/*.yaml`
+FileUtils.mkdir_p('data')
+Dir.glob('data/*.yaml').each { |path| File.delete(path) }
 
 
 Dir.glob("html/*.html").each do |file|
@@ -37,4 +38,3 @@ Dir.glob("html/*.html").each do |file|
     File.open("data/" << data['Amtl.Gemeindeschlüssel'] << '.yaml', "w"){|f| f.puts data.to_yaml }
   end
 end
-
