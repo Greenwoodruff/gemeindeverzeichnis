@@ -24,6 +24,7 @@ Die `./download.sh` lädt die Suchergebnisse als HTML herunter und legt sie unte
 Die `./convert.rb` wandelt die heruntergeladenen Suchergebnisse ins [YAML](http://de.wikipedia.org/wiki/YAML)-Format um und legt sie unter /data ab.
 
 Die `./update.sh` führt den Download und die Umwandlung durch, commitet die Änderungen und pusht diese.
+Fehlt `nokogiri`, wird das Gem dabei automatisch per `gem install nokogiri --no-document` nachinstalliert.
 
 Die `./csv.rb` gibt die YAML-Dateien im CSV-Format auf der Standardausgabe aus.
 Der Header wird dabei nur einmal geschrieben.

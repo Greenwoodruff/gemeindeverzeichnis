@@ -14,6 +14,13 @@ cd `dirname $0`
 # lokales Repo aktualisieren
 git pull $remote $branch
 
+# Abhängigkeit prüfen/ggf. installieren
+if ! ruby -e "require 'nokogiri'" >/dev/null 2>&1
+then
+	echo "Nokogiri fehlt – installiere Gem ..."
+	gem install nokogiri --no-document
+fi
+
 # Download
 ./download.sh
 
@@ -33,4 +40,3 @@ fi
 
 # Aufräumen
 rm $source_dir/*.html
-
