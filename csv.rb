@@ -81,7 +81,12 @@ limit_rows = ENV['LIMIT_ROWS'] ? ENV['LIMIT_ROWS'].to_i : nil
 header_written = false
 rows_written = 0
 
-CSV.open('/dev/stdout', "wb", :col_sep => ';') do |csv|
+$stdout.binmode
+$stdout.write("\uFEFF")
+
+begin
+  csv = CSV.new($stdout, :col_sep => ';')
+
   Dir.glob("data/*.yaml").each do |file|
     yaml = YAML.load_file(file)
 
@@ -99,6 +104,10 @@ CSV.open('/dev/stdout', "wb", :col_sep => ';') do |csv|
     rows_written += 1
     break if limit_rows && rows_written >= limit_rows
   end
+
+  csv.close
+rescue IOError
+  # stdout kann bei Pipe-Abbruch bereits geschlossen sein
 end
 
 save_geocode_cache if with_distance

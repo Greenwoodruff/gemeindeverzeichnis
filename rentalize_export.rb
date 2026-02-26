@@ -10,6 +10,7 @@ require 'uri'
 MIN_POPULATION = (ENV['MIN_POPULATION'] || '50000').to_i
 PROJECT_NAME = ENV['PROJECT_NAME'] || 'Rentalize'
 GEOCODE_ENABLED = ENV['GEOCODE'] == '1'
+OUTPUT_FORMAT = (ENV['OUTPUT_FORMAT'] || 'csv').downcase
 CACHE_FILE = 'geocode_cache.yml'
 
 def geocode_cache
@@ -88,6 +89,15 @@ Dir.glob('data/*.yaml').sort.each do |file|
   ]
 end
 
+col_sep = OUTPUT_FORMAT == 'tsv' ? "\t" : ';'
+
+$stdout.binmode
+$stdout.write("\uFEFF") if OUTPUT_FORMAT == 'csv'
+
+csv = CSV.new($stdout, col_sep: col_sep)
+  csv << %w[projekt ort plz bundesland region lat lng]
+rows.each { |row| csv << row }
+csv.close
 CSV.open('/dev/stdout', 'wb', col_sep: "\t") do |csv|
   csv << %w[projekt ort plz bundesland region lat lng]
   rows.each { |row| csv << row }
